@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Firebase Form Example</title>
+  </head>
+  <body>
+    <h1>Firebase Form Example</h1>
+    <form id="contactForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required /><br />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required /><br />
+
+      <label for="message">Query:</label>
+      <textarea id="message" name="message" required></textarea><br />
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js';
+      import { getDatabase, ref, push } from 'https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js';
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyD4oIxcwpDqbV6-xCYXQX-YAy_UOLRRXOY",
+        authDomain: "auth-2bef8.firebaseapp.com",
+        databaseURL: "https://auth-2bef8-default-rtdb.firebaseio.com",
+        projectId: "auth-2bef8",
+        storageBucket: "auth-2bef8.appspot.com",
+        messagingSenderId: "380500500350",
+        appId: "1:380500500350:web:f12aeb30c4b1e3b9561d2f"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+
+      const contactForm = document.getElementById('contactForm');
+
+      contactForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const name = contactForm.name.value;
+        const email = contactForm.email.value;
+        const message = contactForm.message.value;
+
+        // Push the data to the database
+        push(ref(database, 'contacts'), { name, email, message })
+          .then(() => {
+            alert('Message sent successfully!');
+            contactForm.reset();
+          })
+          .catch((error) => {
+            console.error(error);
+            alert('Failed to send message!');
+          });
+      });
+    </script>
+  </body>
+</html>
